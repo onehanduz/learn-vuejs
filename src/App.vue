@@ -1,30 +1,51 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view/>
+  <div>
+    <nav>
+      <mynavbar :open="open"></mynavbar>
+      <!-- trim modifikator -->
+      <router-link class="unsplash" to="/">Home</router-link> |
+      <router-link class="unsplash" to="/about">About</router-link>
+    </nav>
+    <mymodel v-model:show="modelvisible">
+      <formcom @addComment="addComment" />
+    </mymodel>
+    <ListCom :comments="comments" @remove="removeComment" />
+    <router-view />
+  </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import formcom from "./components/FormCom";
+import ListCom from "./components/ListCom";
+import mynavbar from "@/components/navbar";
+export default {
+  components: {
+    formcom,
+    ListCom,
+    mynavbar,
+  },
+  data() {
+    return {
+      comments: [
+        { id: 1, text: "hello" },
+        { id: 2, text: "world" },
+      ],
+      modelvisible: false,
+    };
+  },
+  methods: {
+    addComment(comment) {
+      this.comments.push(comment);
+      this.modelvisible = false;
+    },
+    removeComment(comment) {
+      this.comments = this.comments.filter((c) => c.id !== comment.id);
+    },
+    open() {
+      this.modelvisible = true;
+    },
+  },
+};
+</script>
 
-nav {
-  padding: 30px;
-}
-
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+<style></style>
