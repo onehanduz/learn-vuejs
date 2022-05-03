@@ -10,7 +10,14 @@
     <mymodel v-model:show="modelvisible">
       <formcom @addComment="addComment" />
     </mymodel>
-    <ListCom :comments="comments" @remove="removeComment" />
+    <ListCom :comments="comments" @remove="removeComment" v-if="!isLoading" />
+    <div v-if="isLoading">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    </div>
     <router-view />
   </div>
 </template>
@@ -30,6 +37,7 @@ export default {
     return {
       comments: [],
       modelvisible: false,
+      isLoading: false,
     };
   },
   methods: {
@@ -45,14 +53,22 @@ export default {
     },
     async fetchComments() {
       try {
-        const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/comments?_limit=10"
-        );
-        this.comments = response.data;
+        setTimeout(async () => {
+          this.isLoading = true;
+          const response = await axios.get(
+            "https://jsonplaceholder.typicode.com/comments?_limit=10"
+          );
+          this.comments = response.data;
+        }, 2000);
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isLoading = false;
       }
     },
+  },
+  mounted() {
+    this.fetchComments();
   },
 };
 </script>
