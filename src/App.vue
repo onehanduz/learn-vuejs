@@ -28,10 +28,7 @@ export default {
   },
   data() {
     return {
-      comments: [
-        { id: 1, text: "hello" },
-        { id: 2, text: "world" },
-      ],
+      comments: [],
       modelvisible: false,
     };
   },
@@ -51,7 +48,7 @@ export default {
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/comments?_limit=10"
         );
-        console.log(response);
+        this.comments = response.data;
       } catch (error) {
         console.log(error);
       }
