@@ -53,13 +53,11 @@ export default {
     },
     async fetchComments() {
       try {
-        setTimeout(async () => {
-          this.isLoading = true;
-          const response = await axios.get(
-            "https://jsonplaceholder.typicode.com/comments?_limit=10"
-          );
-          this.comments = response.data;
-        }, 2000);
+        this.isLoading = true;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/comments?_limit=10"
+        );
+        this.comments = response.data;
       } catch (error) {
         console.log(error);
       } finally {
